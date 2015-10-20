@@ -63,8 +63,11 @@ public class Sudoku{
 					Arcs arc = new Arcs(i, j);
 					queue.add(arc);	
 					neighbour[i].add(j);
+					
+					System.out.print(j+"\t");
 				}
 			}
+			System.out.println();
 		}
 		
 		//add all column neighbours in the queue
@@ -73,8 +76,9 @@ public class Sudoku{
 				if(i!=j){
 					Arcs arc = new Arcs(i,j);
 					neighbour[i].add(j);
+					System.out.print(j+"\t");
 				}
-
+				System.out.println();
 			}
 		
 		//add all 3X3 neighbours in the queue
@@ -123,8 +127,9 @@ public class Sudoku{
 					queue.add(arc9);
 					neighbour[set8[i]].add(set8[j]);
 				}
-				
+				System.out.print(j+"\t");
 			}
+			System.out.println();
 		}
 		
 		
@@ -134,6 +139,11 @@ public class Sudoku{
 	
 	//ac3 comes into picture. 
 	public boolean ac3(){
+		
+		queue = new LinkedList();
+		for( int i = 0 ; i< 81; i++)
+		for (Integer j: neighbour[i])
+		queue.add(new Arcs(i,j));
 		
 		while(!queue.isEmpty()){
 			
@@ -218,11 +228,11 @@ public class Sudoku{
 		  //  for(HashSet h : cell)
 		  //  	System.out.println(h);	
 		  //  for(HashSet h : neighbour)
-		  //  	System.out.println(h);
+		  //  	System.out.println(h.size());
 	    	int count =1;		    	
 		    if(g.ac3())
 		    {
-		    	for(HashSet h : cell){
+		   	for(HashSet h : cell){
 		    		
 		    		 System.out.print(h);	    			
 		    		if(count%9 == 0)
