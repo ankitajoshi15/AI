@@ -13,7 +13,7 @@ public class Sudoku{
 	//according to algorithm, we need a queue of all arcs in the CSP. So i am making a queue of arcs, which i will populate eventually.
 	LinkedList<Arcs> queue = new LinkedList();
 	
-	HashSet<Integer>[] neighbour = new HashSet[81];
+	static HashSet<Integer>[] neighbour = new HashSet[81];
 	
 	public Sudoku(int grid[][]) {
 	    this.grid = grid;
@@ -58,7 +58,7 @@ public class Sudoku{
 		
 		for(int i=0;i<81;i++){
 			neighbour[i] = new HashSet<Integer>();
-			for(int j=i/9;j<(i/9)+9;j++){		
+			for(int j= (i/9)*9;j<((i/9)*9+9);j++){		
 				if(i!=j){
 					Arcs arc = new Arcs(i, j);
 					queue.add(arc);	
@@ -68,7 +68,7 @@ public class Sudoku{
 		}
 		
 		//add all column neighbours in the queue
-		for(int i=0;i<9;i++)
+		for(int i=0;i<81;i++)
 			for(int j=i%9;j<81;j=j+9){
 				if(i!=j){
 					Arcs arc = new Arcs(i,j);
@@ -129,7 +129,6 @@ public class Sudoku{
 		
 		
 		
-		
 	}
 
 	
@@ -145,12 +144,13 @@ public class Sudoku{
 			if(revise(arc)){
 				if(cell[xi].size()==0)
 					return false;
-			System.out.println("Reached");
+			//System.out.println(xi + " " + xj);
 			//	HashSet<Integer> temp = (HashSet<Integer>) neighbour[xi].clone();
 			//	temp.remove(xj);			
 				
 				for (Integer xk : neighbour[xi]) {
-					if(!(neighbour[xj].contains(xk)))
+					//if(!(neighbour[xj].contains(xk)))
+					if(xk!=xj)
 					queue.add(new Arcs(xk,xi));
 				}
 			}
@@ -176,7 +176,7 @@ public class Sudoku{
 			flag = false;
 			for(Integer y : cell[xj])
 			{
-				if(!neighbour[x].contains(y))
+				if(x!=y)
 				{
 					flag = true;
 					break;
@@ -215,12 +215,19 @@ public class Sudoku{
 		    Sudoku g = new Sudoku(grid);
 		    g.assign();
 		    g.initQueuePopulate();
+		  //  for(HashSet h : cell)
+		  //  	System.out.println(h);	
+		  //  for(HashSet h : neighbour)
+		  //  	System.out.println(h);
+	    	int count =1;		    	
 		    if(g.ac3())
 		    {
 		    	for(HashSet h : cell){
-		    		 Integer[] someArray = (Integer[])h.toArray();
-		    		 System.out.println(someArray);	    			
 		    		
+		    		 System.out.print(h);	    			
+		    		if(count%9 == 0)
+		    			System.out.println();
+		    		count++;
 		    	}
 		    }
 		    else {
