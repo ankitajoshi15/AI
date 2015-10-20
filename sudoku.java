@@ -1,15 +1,53 @@
+import java.util.HashSet;
+
 public class sudoku{
 	
 	
 	
 	int grid[][] = new int[9][9];
-
+	HashSet<Integer> []cell = new HashSet[81];
 	
 	public sudoku(int grid[][]) {
 	    this.grid = grid;
 	}
 	
+	//represent every cell and its domain values in the form of a hashset
+	
+	public void assign(){
+		
+	 
+	 int count =0;
+	 for(int i =0;i<9;i++)
+		 for(int j=0;j<9;j++)
+		 {
+			 if(grid[i][j]==0)
+			 {
+				 cell[count].add(1);
+				 cell[count].add(2);
+				 cell[count].add(3);
+				 cell[count].add(4);
+				 cell[count].add(5);
+				 cell[count].add(6);
+				 cell[count].add(7);
+				 cell[count].add(8);
+				 cell[count].add(9);
+				 count++;
+			 }		
+			 else
+			 {
+				 cell[count].add(grid[i][j]);
+				 count++;
+			 }
+				 
+		 }
+	}
+	
+	
+	 
+	
+	
 	//start with given grid
+	
 	
 	
 	//assign empty cells with domain values : 1-9 values
