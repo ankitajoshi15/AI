@@ -64,10 +64,10 @@ public class Sudoku{
 					queue.add(arc);	
 					neighbour[i].add(j);
 					
-					System.out.print(j+"\t");
+					
 				}
 			}
-			System.out.println();
+			
 		}
 		
 		//add all column neighbours in the queue
@@ -75,10 +75,11 @@ public class Sudoku{
 			for(int j=i%9;j<81;j=j+9){
 				if(i!=j){
 					Arcs arc = new Arcs(i,j);
+					queue.add(arc);
 					neighbour[i].add(j);
-					System.out.print(j+"\t");
+					
 				}
-				System.out.println();
+				
 			}
 		
 		//add all 3X3 neighbours in the queue
@@ -127,9 +128,8 @@ public class Sudoku{
 					queue.add(arc9);
 					neighbour[set8[i]].add(set8[j]);
 				}
-				System.out.print(j+"\t");
 			}
-			System.out.println();
+			
 		}
 		
 		
@@ -140,11 +140,11 @@ public class Sudoku{
 	//ac3 comes into picture. 
 	public boolean ac3(){
 		
-		queue = new LinkedList();
+	/*	queue = new LinkedList();
 		for( int i = 0 ; i< 81; i++)
 		for (Integer j: neighbour[i])
 		queue.add(new Arcs(i,j));
-		
+		*/
 		while(!queue.isEmpty()){
 			
 			Arcs arc  = queue.remove();
@@ -222,15 +222,27 @@ public class Sudoku{
 							{8, 0, 0, 2, 0, 3, 0, 0, 9},
 							{0, 0, 5, 0, 1, 0, 3, 0, 0}};
 
-		    Sudoku g = new Sudoku(grid);
-		    g.assign();
-		    g.initQueuePopulate();
+		    int grid2[][] = {{7,9,0,4,6,0,0,0,8},
+		    		{0,4,6,0,0,0,0,9,5},
+		    		{2,0,0,1,0,8,0,7,6},
+		    		{0,5,0,8,1,6,3,0,0},
+		    		{0,0,7,0,3,0,0,4,0},
+		    		{0,0,0,0,5,0,8,6,9},
+		    		{1,0,0,9,8,0,7,0,0},
+		    		{9,2,3,5,0,0,0,0,0},
+		    		{5,0,0,6,0,3,9,0,0}};
+		    				
+		    
+	
+		    Sudoku g1 = new Sudoku(grid);
+		    g1.assign();
+		    g1.initQueuePopulate();
 		  //  for(HashSet h : cell)
 		  //  	System.out.println(h);	
 		  //  for(HashSet h : neighbour)
 		  //  	System.out.println(h.size());
 	    	int count =1;		    	
-		    if(g.ac3())
+		    if(g1.ac3())
 		    {
 		   	for(HashSet h : cell){
 		    		
@@ -240,9 +252,23 @@ public class Sudoku{
 		    		count++;
 		    	}
 		    }
-		    else {
-		    	System.out.println("No Shit!");
+		   
+		    System.out.println("************************");
+		    Sudoku g2 = new Sudoku(grid);
+		    g2.assign();
+		    g2.initQueuePopulate();
+		    count =1;		    	
+		    if(g2.ac3())
+		    {
+		   	for(HashSet h : cell){
+		    		
+		    		 System.out.print(h);	    			
+		    		if(count%9 == 0)
+		    			System.out.println();
+		    		count++;
+		    	}
 		    }
+		   
 		
 	}
 		
