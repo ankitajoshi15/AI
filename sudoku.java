@@ -145,11 +145,12 @@ public class Sudoku{
 			if(revise(arc)){
 				if(cell[xi].size()==0)
 					return false;
-				System.out.println("Reached");
-				HashSet<Integer> temp = (HashSet<Integer>) neighbour[xi].clone();
-				temp.remove(xj);			
+			System.out.println("Reached");
+			//	HashSet<Integer> temp = (HashSet<Integer>) neighbour[xi].clone();
+			//	temp.remove(xj);			
 				
-				for (Integer xk : temp) {
+				for (Integer xk : neighbour[xi]) {
+					if(!(neighbour[xj].contains(xk)))
 					queue.add(new Arcs(xk,xi));
 				}
 			}
@@ -157,6 +158,8 @@ public class Sudoku{
 		return true;
 	}
 	
+	
+
 	public boolean revise(Arcs arc){
 		boolean revised = false;
 		boolean flag;
@@ -189,13 +192,7 @@ public class Sudoku{
 		
 		
 	}
-	
-	
-	
-	
-	//here add all cells to revise queue. each cell will be checked against its neighbours. and its domain values will be pruned accordingly
-	
-	
+		
 	
 	//backtracking shit. 
 	
@@ -229,14 +226,7 @@ public class Sudoku{
 		    else {
 		    	System.out.println("No Shit!");
 		    }
-		    
-		    
-
-
-		  //  g.check();
-
-		   // g.printGrid();
-
+		
 	}
 		
 		
