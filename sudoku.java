@@ -1,21 +1,27 @@
 import java.util.HashSet;
+import java.util.LinkedList;
 
-public class sudoku{
+public class Sudoku{
 	
 	
 	
 	int grid[][] = new int[9][9];
 	HashSet<Integer> []cell = new HashSet[81];
 	
-	public sudoku(int grid[][]) {
+	
+	//according to algorithm, we need a queue of all arcs in the CSP. So i am making a queue of arcs, which i will populate eventually.
+	LinkedList<Arcs> queue = new LinkedList();
+	
+	public Sudoku(int grid[][]) {
 	    this.grid = grid;
 	}
 	
 	//represent every cell and its domain values in the form of a hashset
+	//start with given grid	
+	//assign empty cells with domain values : 1-9 values
 	
 	public void assign(){
-		
-	 
+			 
 	 int count =0;
 	 for(int i =0;i<9;i++)
 		 for(int j=0;j<9;j++)
@@ -42,17 +48,42 @@ public class sudoku{
 		 }
 	}
 	
-	
-	 
-	
-	
-	//start with given grid
-	
-	
-	
-	//assign empty cells with domain values : 1-9 values
+	//populate the initial queue of arcs.
+	public void initQueuePopulate(){
+		
+		for(int i=0;i<81;i++){
+			for(int j=i+1;j<81;j++){						
+				
+					Arcs arc = new Arcs(i, j);
+					queue.add(arc);	
+			}
+		}
+		for(int i=0;i<9;i++)
+			for(int j=i+9;j<81;j=j+9){
+				
+				Arcs arc = new Arcs(i,j);		
+			}
+		
+	}
+
 	
 	//ac3 comes into picture. 
+	public void ac3(){
+		
+		
+		
+		
+		//for each cell in the hashset, for 1 to 81 cells compare each with its neighbours, and 
+		
+	}
+	
+	public void revise(){
+		
+	}
+	
+	
+	
+	
 	//here add all cells to revise queue. each cell will be checked against its neighbours. and its domain values will be pruned accordingly
 	
 	
@@ -75,7 +106,7 @@ public class sudoku{
 							{8, 0, 0, 2, 0, 3, 0, 0, 9},
 							{0, 0, 5, 0, 1, 0, 3, 0, 0}};
 
-		    sudoku g = new sudoku(grid);
+		    Sudoku g = new Sudoku(grid);
 
 
 		  //  g.check();
