@@ -51,18 +51,25 @@ public class Sudoku{
 	//populate the initial queue of arcs.
 	public void initQueuePopulate(){
 		
+		//add all row neighboours in the queue
+		
 		for(int i=0;i<81;i++){
-			for(int j=i+1;j<81;j++){						
+			for(int j=0;j<((i/9)+1)*9;j++){						
 				
 					Arcs arc = new Arcs(i, j);
 					queue.add(arc);	
 			}
 		}
+		
+		//add all column neighbours in the queue
 		for(int i=0;i<9;i++)
 			for(int j=i+9;j<81;j=j+9){
 				
-				Arcs arc = new Arcs(i,j);		
+				Arcs arc = new Arcs(i,j);	
+				queue.add(arc);
 			}
+		
+		//add all 3X3 neighbours in the queue
 		
 	}
 
