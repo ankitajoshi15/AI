@@ -58,12 +58,12 @@ public class Sudoku{
 		
 		for(int i=0;i<81;i++){
 			neighbour[i] = new HashSet<Integer>();
-			for(int j=0;j<((i/9)+1)*9;j++){						
+			for(int j=i/9;j<(i/9)+9;j++){						
 				
 					Arcs arc = new Arcs(i, j);
 					queue.add(arc);	
-					
-					neighbour[i].add(j);
+					if(i!=j)
+						neighbour[i].add(j);
 			}
 		}
 		
@@ -72,7 +72,8 @@ public class Sudoku{
 			for(int j=i+9;j<81;j=j+9){
 				
 				Arcs arc = new Arcs(i,j);
-				neighbour[i].add(j);
+				if(i!=j)
+					neighbour[i].add(j);
 
 			}
 		
