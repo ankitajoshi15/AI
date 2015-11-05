@@ -1,13 +1,14 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class DPLL {
 	
-	//static HashSet<Integer> []data = new HashSet[100];
-	
 	String[] colors = {"r","g","b"};
-	static HashSet<Integer> []connections = new HashSet[6];	
-	static ArrayList<HashSet> kb = new ArrayList();
+	static HashSet<Integer> []connections = new HashSet[6];	 //for all the edges in the kb
+	static ArrayList<HashSet> kb = new ArrayList(); //for the knowledge base
+	static ArrayList<String> symbols = new ArrayList(); //for all the symbols
+	static HashMap<String,Boolean> model = new HashMap();
 	
 	public void makeKB()
 	{
@@ -20,29 +21,24 @@ public class DPLL {
 				{
 					HashSet clauses = new HashSet<String>();
 					clauses.add(i+colors[k]+"!");					
-					clauses.add(j+colors[k]+"!");					
+					clauses.add(j+colors[k]+"!");
 					kb.add(clauses);							
-				}		
+				}	
 			}	
-		}
-		
+		}		
 		for(int k=0;k<6;k++)
-		{
-			
+		{			
 			for(int i=0;i<colors.length;i++)
 			{
-				
 				for(int j=i+1;j<colors.length;j++)
 				{
 					HashSet clauses = new HashSet<String>();
 					clauses.add(k+colors[i]+"!");
 					clauses.add(k+colors[j]+"!");
 					kb.add(clauses);	
-				}
-				
+				}	
 			}
-		}
-		
+		}		
 		for(int i=0;i<6;i++)
 		{
 			HashSet clauses = new HashSet<String>();
@@ -50,7 +46,16 @@ public class DPLL {
 			clauses.add(i+"g");
 			clauses.add(i+"b");
 			kb.add(clauses);
+		}
 		
+		//Adding symbols
+		
+		for(int i=0;i<6;i++)
+		{
+			for(int j=0;j<colors.length;j++)
+			{
+				symbols.add(i+colors[j]);
+			}
 		}
 	}
 	
@@ -91,33 +96,92 @@ public class DPLL {
 	        
 	    	System.out.println(i);
 	    }
+	    
+	    for(String i: symbols)
+	    {
+	    	System.out.println(i);
+	    }
 	}
 	
-	public void dpllSatisfiable(kb,symbols,model){
+	public int evaluateKB(HashMap<String,Boolean> model)
+	{
 		
-	result = evaluateKB(KB,model)
-	if result == TRUE:
-	return True
-	elif result == FALSE:
-	return False
-	s=None
-	for symbol in symbols:
-	s = symbol
-	break
-	symbols.remove(s)
-	newmodel = deepcopy(model)
-	newmodel[s]=True
-	ans1=DPLL(KB,symbols,newmodel)
-	if ans1:
-	print(newmodel)
-	return True
-	newmodel[s]=False
-	ans1=DPLL(KB,symbols,newmodel)
-	if ans1:
-	print(newmodel)
-	return True
-	DPLL(KB,symbols,{})
+		int trueKB = 1;
+		for(HashSet<String> i: kb)
+		{
+			boolean trueClause= false;
+			boolean unDecidedLiterals =false;
+			for(String literal : i)
+			{					
+				boolean truthValue = !literal.endsWith("!");
+				if(!truthValue)
+					literal = literal.substring(0, literal.length()-1);
+				if(model.containsKey(literal))
+				{
+					if(model.get(literal) == truthValue) //literal has truthValue that makes it true, then the whole clause is true
+							trueClause = true;
+				}
+				else
+				{
+					unDecidedLiterals = true;
+				}			
+			}
+			if(!trueClause){
+				if(!unDecidedLiterals)
+					return 0;
+				trueKB =0;
+				
+			}
+		}	
+		if(trueKB == 1)
+			return 1;
+		return 2;	
+	}
+	
+	public boolean dpllSatisfiable(ArrayList<String> symbols,HashMap<String,Boolean> model){
 
+	
+	
+	int result = evaluateKB(model);
+	if(result == 1)
+		return true;
+	else 
+	if(result == 0)
+		return false;
+	if(symbols.size()==0)
+		return false;
+	String sym=symbols.get(symbols.size()-1);
+	ArrayList<String> newSymbols =(ArrayList<String>)symbols.clone(); //for all the symbols
+	 
+	newSymbols.remove(symbols.size()-1);
+	
+	HashMap<String,Boolean> newModelT = (HashMap<String,Boolean>)model.clone();
+	newModelT.put(sym,true);
+	boolean value1=dpllSatisfiable(newSymbols,newModelT);
+	if(value1)
+	{
+		
+		for(String s : newModelT.keySet())
+			System.out.println(s+" : "+ newModelT.get(s));
+		System.exit(0);
+		return true;
+	}
+	
+	HashMap<String,Boolean> newModelF = (HashMap<String,Boolean>)model.clone();
+	newModelF.put(sym,false);
+	boolean value2=dpllSatisfiable(newSymbols,newModelF);
+	if(value2)
+	{
+		
+		for(String s : newModelF.keySet())
+		{
+			if(newModelF.get(s))
+			System.out.println(s+" : "+ newModelF.get(s));
+		}
+		System.exit(0);
+		return true;
+	}
+	return false;
 	
 	}
 	
@@ -139,8 +203,8 @@ public class DPLL {
 	
 	dpll.makeConnections();
 	dpll.makeKB();
-	dpll.printList();
-	
+	//dpll.printList();
+	dpll.dpllSatisfiable(symbols, model);
 	}
 
 }
